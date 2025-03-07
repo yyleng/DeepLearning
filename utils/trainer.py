@@ -18,6 +18,7 @@ class Trainer:
 
             def init_weights_fun(m):
                 if isinstance(m, (nn.Linear, nn.Conv2d)):
+                    # 均匀分布
                     nn.init.xavier_uniform_(m.weight)
 
             model.apply(init_weights_fun)
