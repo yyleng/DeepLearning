@@ -39,3 +39,14 @@ def evaluate_accuracy_gpu(net, accuracy, test_iter=None, loss=None, device=None)
                 return metric[0] / metric[2], metric[1] / metric[2]
             metric.add(accuracy(y_hat, y), batch_size)
             return metric[0] / metric[1], None
+
+
+def evaluate_loss(net, data_iter, loss):
+    """Evaluate the loss of a model on the given dataset."""
+    metric = Accumulator(2)  # Sum of losses, data instances
+    for X, y in data_iter:
+        out = net(X)
+        y = torch.reshape(y, out.shape)
+        l = loss(out, y)
+        metric.add(torch.sum(l), torch.numel(l))
+    return metric[0] / metric[1]
